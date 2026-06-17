@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/alexsandroocanha/Golang-Api-Crud/controller"
+	"github.com/alexsandroocanha/Golang-Api-Crud/db"
+	"github.com/alexsandroocanha/Golang-Api-Crud/repository"
 	"github.com/alexsandroocanha/Golang-Api-Crud/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -10,7 +12,14 @@ func main() {
 
 	server := gin.Default()
 
-	ProductUseCase := usecase.NewProductUsecase()
+	dbConnection, err := db.ConnectDB()
+	if err != nil {
+		panic(err)
+	}
+
+	productRepository := repository.NewProductRepository(dbConnection)
+
+	ProductUseCase := usecase.NewProductUsecase(productRepository)
 
 	productController := controller.NewProductController(ProductUseCase)
 
