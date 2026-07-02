@@ -1,5 +1,6 @@
 .git
 .exe
+.env
 archive.sql
 docker-compose.yaml
 Dockerfile

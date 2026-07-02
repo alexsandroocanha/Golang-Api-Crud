@@ -9,7 +9,7 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -o main .
+RUN go build -o main ./cmd
 
 FROM alpine:latest
 
@@ -17,7 +17,7 @@ WORKDIR /app
 
 COPY --from=build /app/main .
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD wget -qO- http://localhost:8000/health || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD wget -qO- http://localhost:8000/ping || exit 1
 
 EXPOSE 8000
 
