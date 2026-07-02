@@ -76,7 +76,9 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/alexsandroocanha/golang-api-crud:${{ github.sha }}
+          tags: |
+            ghcr.io/alexsandroocanha/golang-api-crud:latest
+            ghcr.io/alexsandroocanha/golang-api-crud:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
