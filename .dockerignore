@@ -4,5 +4,5 @@ archive.sql
 docker-compose.yaml
 Dockerfile
 README.md
-.migrations/
-.migrations/*
+migrations/
+coverage
