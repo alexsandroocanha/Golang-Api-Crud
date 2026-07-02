@@ -15,7 +15,12 @@ FROM alpine:latest
 
 WORKDIR /app
 
+RUN add user -D appuser
+
+
 COPY --from=build /app/main .
+
+USER appuser
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD wget -qO- http://localhost:8000/ping || exit 1
 
