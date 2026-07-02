@@ -15,6 +15,7 @@ func GetDBConnection() string {
 	if err != nil {
 		log.Println(".env não encontrado, usando variáveis do sistema")
 		log.Println("")
+		log.Println("")
 	}
 
 	return fmt.Sprintf(
