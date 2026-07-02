@@ -1,7 +1,6 @@
 name: Production Release
-
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
   push:
     branches: [ "main" ]
 
@@ -9,17 +8,57 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: read
+      contents: write
+      packages: write
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@c99871dec2022cc055c062a10cc1a1310835ceb4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Pull Docker image
+
+      - name: Get source SHA
+        id: sha
+        run: echo "sha=$(git rev-parse HEAD^2)" >> "$GITHUB_OUTPUT"
+
+      - name: Calculate next version
+        id: version
         run: |
-          IMAGE=ghcr.io/alexsandroocanha/golang-api-crud:latest
-          docker pull $IMAGE
+          LAST_TAG=$(git tag --list 'v*.*.*' --sort=-v:refname | head -n1)
+          LAST_TAG=${LAST_TAG:-v0.0.0}
+          VERSION=${LAST_TAG#v}
+
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+
+          PATCH=$((PATCH + 1))
+
+          FULL="$MAJOR.$MINOR.$PATCH"
+          echo "full=$FULL" >> "$GITHUB_OUTPUT"
+          echo "major=$MAJOR" >> "$GITHUB_OUTPUT"
+          echo "minor=$MAJOR.$MINOR" >> "$GITHUB_OUTPUT"
+
+      - name: Promote image with semver tags
+        run: |
+          docker buildx imagetools create \
+            -t ghcr.io/alexsandroocanha/golang-api-crud:v${{ steps.version.outputs.full }} \
+            -t ghcr.io/alexsandroocanha/golang-api-crud:v${{ steps.version.outputs.minor }} \
+            -t ghcr.io/alexsandroocanha/golang-api-crud:v${{ steps.version.outputs.major }} \
+            -t ghcr.io/alexsandroocanha/golang-api-crud:stable \
+            ghcr.io/alexsandroocanha/golang-api-crud:${{ steps.sha.outputs.sha }}
+
+      - name: Tag commit in git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git tag v${{ steps.version.outputs.full }}
+          git push origin v${{ steps.version.outputs.full }}
+
+      - name: Verify promoted image
+        run: docker pull ghcr.io/alexsandroocanha/golang-api-crud:v${{ steps.version.outputs.full }}
