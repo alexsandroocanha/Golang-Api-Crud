@@ -1,4 +1,4 @@
-name: Development workflow
+name: Development pull request
 
 on:
   pull_request:
