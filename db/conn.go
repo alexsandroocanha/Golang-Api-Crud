@@ -14,6 +14,7 @@ func GetDBConnection() string {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println(".env não encontrado, usando variáveis do sistema")
+		log.Println("")
 	}
 
 	return fmt.Sprintf(
