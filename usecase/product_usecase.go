@@ -6,14 +6,19 @@ import (
 )
 
 type ProductUsecase struct {
-	// repository
-	repository repository.ProductRepository
+	repository repository.ProductRepositoryInterface
 }
 
-func NewProductUsecase(repo repository.ProductRepository) ProductUsecase {
-	return ProductUsecase{
+func NewProductUsecase(repo repository.ProductRepositoryInterface) *ProductUsecase {
+	return &ProductUsecase{
 		repository: repo,
 	}
+}
+
+type ProductUsecaseInterface interface {
+	GetProducts() ([]model.Product, error)
+	CreateProduct(product model.Product) (model.Product, error)
+	GetProductById(id_product int) (*model.Product, error)
 }
 
 func (pu *ProductUsecase) GetProducts() ([]model.Product, error) {
