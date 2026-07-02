@@ -1,4 +1,4 @@
-name: Development
+name: Development workflow
 
 on:
   workflow_dispatch:
