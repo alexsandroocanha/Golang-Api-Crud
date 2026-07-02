@@ -67,7 +67,7 @@ jobs:
       
       - name: Build and push Docker image
         run: |
-          IMAGE=ghcr.io/${{ github.repository }}:${{ github.sha }}
+          IMAGE=ghcr.io/alexsandroocanha/golang-api-crud:${{ github.sha }}
           docker build \
             --file Dockerfile \
             --tag $IMAGE \
@@ -88,13 +88,13 @@ jobs:
   
       - name: Pull Docker image
         run: |
-          IMAGE=ghcr.io/${{ github.repository }}:${{ github.sha }}
+          IMAGE=ghcr.io/alexsandroocanha/golang-api-crud:${{ github.sha }}
           docker pull $IMAGE
   
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@0.24.0
         with:
-          image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          image-ref: ghcr.io/alexsandroocanha/golang-api-crud:${{ github.sha }}
           format: table
           exit-code: 1
           severity: CRITICAL,HIGH
