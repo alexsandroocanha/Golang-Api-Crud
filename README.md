@@ -152,8 +152,6 @@ golang-api-crud
 
 ---
 
-# Pipeline CI/CD
-
 <h1 align="center">Pipeline CI/CD</h1>
 <p align="center">
 <i>Build Once, Promote Many</i>
