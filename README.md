@@ -9,3 +9,6 @@ migrate -path migrations -database "postgres://postgres:1234@localhost:5432/post
 TESTE DE CI
 TESTE DE CI
 TESTE DE CI
+TESTE DE CI
+TESTE DE CI
+TESTE DE CI
