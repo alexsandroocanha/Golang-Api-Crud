@@ -34,5 +34,6 @@ func main() {
 	server.POST("/product", productController.CreateProduct)
 
 	server.Run(":8000")
+	/// alou
 
 }
