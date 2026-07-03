@@ -5,7 +5,7 @@
 
 ---
 
-# Sumário
+## Sumário
 
 - [Visão Geral](#visão-geral)
 - [Arquitetura da Solução](#arquitetura-da-solução)
@@ -22,7 +22,7 @@
 
 ---
 
-# Visão Geral
+### Visão Geral
 
 API REST desenvolvida em Go, com operações de CRUD, persistindo dados em PostgreSQL. O projeto segue uma arquitetura em camadas (inspirada em Clean Architecture) e conta com uma pipeline de CI/CD completa, cobrindo testes, qualidade de código, segurança e deploy automatizado em Kubernetes (Dev e Prod).
 
@@ -30,7 +30,7 @@ O objetivo deste projeto é colocar em prática, de ponta a ponta, boas prática
 
 ---
 
-# Arquitetura da Solução
+### Arquitetura da Solução
 
 ```
 Developer
@@ -57,7 +57,7 @@ GitHub Actions
 
 ---
 
-# Arquitetura do Código
+### Arquitetura do Código
 
 O projeto é organizado em camadas com responsabilidades bem definidas:
 
@@ -73,15 +73,15 @@ O projeto é organizado em camadas com responsabilidades bem definidas:
 
 ---
 
-# Stack Tecnológica
+## Stack Tecnológica
 
-## Application Stack
+### Application Stack
 
 - Go (Golang)
 - Gin
 - PostgreSQL
 
-## DevOps Stack
+### DevOps Stack
 
 - Docker
 - Kubernetes
@@ -93,7 +93,7 @@ O projeto é organizado em camadas com responsabilidades bem definidas:
 
 ---
 
-# Infraestrutura
+## Infraestrutura
 
 O projeto utiliza uma arquitetura baseada em containers e Kubernetes.
 
@@ -106,7 +106,7 @@ O projeto utiliza uma arquitetura baseada em containers e Kubernetes.
 
 ---
 
-# Execução Local
+## Execução Local
 
 ```bash
 # clonar o repositório
@@ -128,7 +128,7 @@ A aplicação sobe por padrão na porta **8000**.
 
 ---
 
-# Docker
+## Docker
 
 ```bash
 docker build -t golang-api-crud .
@@ -141,7 +141,7 @@ golang-api-crud
 
 ---
 
-# Endpoints
+## Endpoints
 
 | Método | Endpoint | Descrição |
 |---------|----------|-----------|
@@ -165,7 +165,7 @@ Após todos os testes e validações de segurança, a mesma imagem é promovida 
 
 Os manifests Kubernetes ficam em um repositório separado utilizando **Kustomize** com overlays para **Dev** e **Prod**.
 
-## Workflows
+### Workflows
 
 | Workflow | Objetivo |
 |----------|----------|
@@ -175,7 +175,7 @@ Os manifests Kubernetes ficam em um repositório separado utilizando **Kustomize
 
 ---
 
-# Segurança (DevSecOps)
+## Segurança (DevSecOps)
 
 Durante a pipeline são aplicadas diversas validações automáticas.
 
@@ -190,7 +190,7 @@ Durante a pipeline são aplicadas diversas validações automáticas.
 
 ---
 
-# Diagrama do Fluxo
+## Diagrama do Fluxo
 
 ```text
 PR
@@ -224,7 +224,7 @@ Deploy Produção
 ```
 ---
 
-## Próximo Repositório
+### Próximo Repositório
 
 Este repositório contém a aplicação.
 
@@ -234,7 +234,7 @@ A infraestrutura Kubernetes encontra-se no repositório de manifests.
 
 ---
 
-# Contato
+## Contato
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alexsandro-ocanha-rodrigues-77149a35b/)
 
