@@ -1,8 +1,14 @@
 name: Production Release
+
 on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
+
+concurrency:
+  group: production-release
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -10,20 +16,41 @@ jobs:
       contents: write
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@c99871dec2022cc055c062a10cc1a1310835ceb4
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get source SHA
+      - name: Get dev branch SHA to promote
         id: sha
-        run: echo "sha=$(git rev-parse HEAD^2)" >> "$GITHUB_OUTPUT"
+        run: |
+          DEV_SHA=$(git ls-remote origin refs/heads/dev | cut -f1)
+          if [ -z "$DEV_SHA" ]; then
+            echo "Não consegui resolver o SHA da branch dev" >&2
+            exit 1
+          fi
+          echo "sha=$DEV_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for dev image to be available
+        run: |
+          IMAGE="ghcr.io/alexsandroocanha/golang-api-crud:${{ steps.sha.outputs.sha }}"
+          for i in $(seq 1 20); do
+            if docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
+              echo "Imagem encontrada: $IMAGE"
+              exit 0
+            fi
+            echo "Imagem ainda não disponível (tentativa $i/20), aguardando..."
+            sleep 15
+          done
+          echo "Timeout esperando a imagem $IMAGE aparecer no ghcr.io" >&2
+          exit 1
 
       - name: Calculate next version
         id: version
@@ -59,16 +86,19 @@ jobs:
       - name: Checkout manifests repo
         uses: actions/checkout@v4
         with:
+          persist-credentials: true
           repository: alexsandroocanha/Golang-Api-Crud-Manifests
           token: ${{ secrets.MANIFESTS_REPO_TOKEN }}
+          ref: main
           path: manifests
+
+      - name: Setup Kustomize
+        uses: imranismail/setup-kustomize@v2
 
       - name: Update image tag in prod overlay
         working-directory: manifests/overlays/prod
         run: |
-          curl -sLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/latest/download/kustomize_linux_amd64
-          chmod +x kustomize
-          ./kustomize edit set image ghcr.io/alexsandroocanha/golang-api-crud:v${{ steps.version.outputs.full }}
+          kustomize edit set image ghcr.io/alexsandroocanha/golang-api-crud:v${{ steps.version.outputs.full }}
 
       - name: Commit and push manifest update
         working-directory: manifests
@@ -77,4 +107,9 @@ jobs:
           git config user.email "actions@github.com"
           git add overlays/prod/kustomization.yaml
           git commit -m "deploy: golang-api-crud prod v${{ steps.version.outputs.full }}"
-          git push
+
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin main && break
+            echo "push falhou (tentativa $i), tentando de novo..."
+            sleep 3
+          done
