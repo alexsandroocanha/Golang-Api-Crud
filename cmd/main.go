@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/alexsandroocanha/Golang-Api-Crud/controller"
 	"github.com/alexsandroocanha/Golang-Api-Crud/db"
 	"github.com/alexsandroocanha/Golang-Api-Crud/repository"
@@ -34,5 +36,7 @@ func main() {
 	server.POST("/product", productController.CreateProduct)
 
 	server.Run(":8000")
+
+	fmt.Println("Server running on port 8000")
 
 }
