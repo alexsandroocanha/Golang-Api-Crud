@@ -1,38 +1,39 @@
-<h1 align="center">Golang Api Crud</h1>
+<h1 align="center">Golang API CRUD</h1>
 <p align="center">
-<i>API REST simples desenvolvida em Go com pipeline CI/CD completa e deploy automatizado em Kubernetes.</i>
+<i>A simple REST API built with Go, featuring a complete CI/CD pipeline and automated Kubernetes deployment.</i>
 </p>
 
 ---
 
-## Sumário
+## Table of Contents
 
-- [Visão Geral](#visão-geral)
-- [Arquitetura da Solução](#arquitetura-da-solução)
-- [Arquitetura do Código](#arquitetura-do-código)
-- [Stack Tecnológica](#stack-tecnológica)
-- [Infraestrutura](#infraestrutura)
-- [Execução Local](#execução-local)
-- [Docker](#docker)
-- [Endpoints](#endpoints)
-- [Pipeline CI/CD](#pipeline-cicd)
-- [Segurança (DevSecOps)](#segurança-devsecops)
-- [Diagrama do Fluxo](#diagrama-do-fluxo)
-- [Contato](#contato)
-
----
-
-### Visão Geral
-
-API REST desenvolvida em Go, com operações de CRUD, persistindo dados em PostgreSQL. O projeto segue uma arquitetura em camadas (inspirada em Clean Architecture) e conta com uma pipeline de CI/CD completa, cobrindo testes, qualidade de código, segurança e deploy automatizado em Kubernetes (Dev e Prod).
-
-O objetivo deste projeto é colocar em prática, de ponta a ponta, boas práticas de desenvolvimento e entrega de software utilizando práticas de DevSecOps. Desde a escrita do código até o deploy em produção, passando por validações automatizadas de qualidade e segurança.
+* [Overview](#overview)
+* [Solution Architecture](#solution-architecture)
+* [Code Architecture](#code-architecture)
+* [Technology Stack](#technology-stack)
+* [Infrastructure](#infrastructure)
+* [Local Setup](#local-setup)
+* [Docker](#docker)
+* [Endpoints](#endpoints)
+* [CI/CD Pipeline](#cicd-pipeline)
+* [Security (DevSecOps)](#security-devsecops)
+* [Workflow Diagram](#workflow-diagram)
+* [Next Repository](#next-repository)
+* [Contact](#contact)
 
 ---
 
-### Arquitetura da Solução
+## Overview
 
-```
+This project is a REST API developed in Go that performs CRUD operations while persisting data in PostgreSQL. The application follows a layered architecture (inspired by Clean Architecture) and includes a complete CI/CD pipeline covering automated testing, code quality analysis, security scanning, and automated deployments to Kubernetes environments (Development and Production).
+
+The primary goal of this project is to demonstrate end-to-end software development and delivery best practices using a DevSecOps approach from writing the code to deploying it into production, including automated quality and security validation throughout the pipeline.
+
+---
+
+## Solution Architecture
+
+```text
 Developer
      │
      ▼
@@ -41,12 +42,12 @@ GitHub
      ▼
 GitHub Actions
      │
-     ├── Testes
+     ├── Tests
      ├── SonarCloud
-     ├── Build Docker
+     ├── Docker Build
      ├── Trivy Scan
-     ├── Push GHCR
-     └── Deploy Kubernetes
+     ├── Push to GHCR
+     └── Kubernetes Deployment
                      │
                      ▼
             Kubernetes Cluster
@@ -57,74 +58,74 @@ GitHub Actions
 
 ---
 
-### Arquitetura do Código
+## Code Architecture
 
-O projeto é organizado em camadas com responsabilidades bem definidas:
+The project is organized into layers with well-defined responsibilities.
 
 ```text
-├── cmd/          # Ponto de entrada da aplicação (main.go)
-├── controller/   # Camada HTTP - recebe requisições e trata respostas
-├── usecase/      # Regras de negócio da aplicação
-├── repository/   # Acesso a dados / abstração do banco
-├── model/        # Entidades e estruturas de dados
-├── db/           # Conexão e configuração do banco de dados
-├── migrations/   # Versionamento do schema do PostgreSQL
+├── cmd/          # Application entry point (main.go)
+├── controller/   # HTTP layer - handles requests and responses
+├── usecase/      # Business logic
+├── repository/   # Data access layer / database abstraction
+├── model/        # Entities and data structures
+├── db/           # Database connection and configuration
+├── migrations/   # PostgreSQL schema migrations
 ```
 
 ---
 
-## Stack Tecnológica
+## Technology Stack
 
 ### Application Stack
 
-- Go (Golang)
-- Gin
-- PostgreSQL
+* Go (Golang)
+* Gin
+* PostgreSQL
 
 ### DevOps Stack
 
-- Docker
-- Kubernetes
-- GitHub Actions
-- GitHub Container Registry (GHCR)
-- Kustomize
-- SonarCloud
-- Trivy
+* Docker
+* Kubernetes
+* GitHub Actions
+* GitHub Container Registry (GHCR)
+* Kustomize
+* SonarCloud
+* Trivy
 
 ---
 
-## Infraestrutura
+## Infrastructure
 
-O projeto utiliza uma arquitetura baseada em containers e Kubernetes.
+The project uses a containerized architecture orchestrated by Kubernetes.
 
-- Docker para empacotamento da aplicação
-- PostgreSQL como banco de dados
-- Kubernetes para orquestração
-- Kustomize para gerenciamento dos ambientes
-- GitHub Container Registry para armazenamento das imagens
-- GitHub Actions para CI/CD
+* Docker for application packaging
+* PostgreSQL as the relational database
+* Kubernetes for container orchestration
+* Kustomize for environment management
+* GitHub Container Registry (GHCR) for image storage
+* GitHub Actions for CI/CD automation
 
 ---
 
-## Execução Local
+## Local Setup
 
 ```bash
-# clonar o repositório
+# Clone the repository
 git clone https://github.com/alexsandroocanha/Golang-Api-Crud.git
 cd Golang-Api-Crud
 
-# configurar variáveis de ambiente
+# Configure environment variables
 export DB_HOST=localhost
 export DB_PORT=5432
 export DB_USER=postgres
 export DB_PASSWORD=postgres
 export DB_NAME=golang_crud
 
-# rodar a aplicação
+# Run the application
 go run cmd/main.go
 ```
 
-A aplicação sobe por padrão na porta **8000**.
+The application runs on port **8000** by default.
 
 ---
 
@@ -143,102 +144,102 @@ golang-api-crud
 
 ## Endpoints
 
-| Método | Endpoint | Descrição |
-|---------|----------|-----------|
-| GET | `/ping` | Health Check |
-| GET | `/products` | Lista todos os produtos |
-| GET | `/product/:productId` | Busca produto por ID |
-| POST | `/product` | Cria um novo produto |
+| Method | Endpoint              | Description              |
+| ------ | --------------------- | ------------------------ |
+| GET    | `/ping`               | Health Check             |
+| GET    | `/products`           | List all products        |
+| GET    | `/product/:productId` | Retrieve a product by ID |
+| POST   | `/product`            | Create a new product     |
 
 ---
 
-<h1 align="center">Pipeline CI/CD</h1>
+<h1 align="center">CI/CD Pipeline</h1>
 <p align="center">
 <i>Build Once, Promote Many</i>
 </p>
 
-A estratégia utilizada neste projeto é **Build Once, Promote Many**.
+This project follows the **Build Once, Promote Many** deployment strategy.
 
-A imagem Docker é construída apenas uma vez quando ocorre merge na branch `dev`.
+The Docker image is built only once after a merge into the `dev` branch.
 
-Após todos os testes e validações de segurança, a mesma imagem é promovida para produção utilizando apenas novas tags semânticas, eliminando diferenças entre os ambientes.
+Once all automated tests and security validations have passed, the same image is promoted to production by applying semantic version tags, ensuring consistency across every environment.
 
-Os manifests Kubernetes ficam em um repositório separado utilizando **Kustomize** com overlays para **Dev** e **Prod**.
+Kubernetes manifests are maintained in a separate repository using **Kustomize** with dedicated overlays for both **Development** and **Production** environments.
 
 ### Workflows
 
-| Workflow | Objetivo |
-|----------|----------|
-| Development Pull Request | Testes + Cobertura + SonarCloud |
-| Development Deploy | Build + Push + Trivy + Deploy Dev |
-| Production Release | Promote Image + Versionamento + Deploy Prod |
+| Workflow                 | Purpose                                              |
+| ------------------------ | ---------------------------------------------------- |
+| Development Pull Request | Tests + Code Coverage + SonarCloud                   |
+| Development Deployment   | Build + Push + Trivy Scan + Development Deployment   |
+| Production Release       | Image Promotion + Versioning + Production Deployment |
 
 ---
 
-## Segurança (DevSecOps)
+## Security (DevSecOps)
 
-Durante a pipeline são aplicadas diversas validações automáticas.
+The CI/CD pipeline includes multiple automated security and quality controls.
 
-- Testes automatizados
-- Cobertura de código
-- SonarCloud
-- Trivy Image Scan
-- GitHub Container Registry
-- Actions fixadas por SHA (Supply Chain Security)
-- Gates de Deploy
-- Build Once Promote Many
+* Automated tests
+* Code coverage
+* SonarCloud analysis
+* Trivy image scanning
+* GitHub Container Registry
+* GitHub Actions pinned by SHA (Supply Chain Security)
+* Deployment gates
+* Build Once, Promote Many strategy
 
 ---
 
-## Diagrama do Fluxo
+## Workflow Diagram
 
 ```text
-PR
+Pull Request
  │
  ▼
-Testes
+Tests
  │
  ▼
 SonarCloud
  │
  ▼
-Build Docker
+Docker Build
  │
  ▼
-Push GHCR
+Push to GHCR
  │
  ▼
 Trivy Scan
  │
  ▼
-Deploy Dev
+Development Deployment
  │
  ▼
-Merge Main
+Merge to Main
  │
  ▼
-Promote Image
+Image Promotion
  │
  ▼
-Deploy Produção
+Production Deployment
 ```
----
-
-### Próximo Repositório
-
-Este repositório contém a aplicação.
-
-A infraestrutura Kubernetes encontra-se no repositório de manifests.
-
-[![GitHub Pages](https://img.shields.io/badge/Golang%20API%20Crud%20Manifests-121013?style=for-the-badge&logo=github&logoColor=white)](https://github.com/alexsandroocanha/Golang-Api-Crud-Manifests)
 
 ---
 
-## Contato
+## Next Repository
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alexsandro-ocanha-rodrigues-77149a35b/)
+This repository contains the application source code.
 
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/alexsandro.pcap/)
+The Kubernetes infrastructure is maintained in a separate manifests repository.
 
-[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:alexsandroocanha@gmail.com)
+[![GitHub Pages](https://img.shields.io/badge/Golang%20API%20Crud%20Manifests-121013?style=for-the-badge\&logo=github\&logoColor=white)](https://github.com/alexsandroocanha/Golang-Api-Crud-Manifests)
 
+---
+
+## Contact
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge\&logo=linkedin\&logoColor=white)](https://www.linkedin.com/in/alexsandro-ocanha-rodrigues-77149a35b/)
+
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge\&logo=instagram\&logoColor=white)](https://www.instagram.com/alexsandro.pcap/)
+
+[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge\&logo=gmail\&logoColor=white)](mailto:alexsandroocanha@gmail.com)
